@@ -1,5 +1,5 @@
 
-function getComputerChoice(){
+function getComputerChoice() {
   let randomNum = Math.floor(Math.random() * 3);
   switch (randomNum) {
     case 0:
@@ -11,7 +11,7 @@ function getComputerChoice(){
   }
 }
 
-function getUserChoice(){
+function getUserChoice() {
   let choice = "";
   invalidChoice = true;
   while(invalidChoice){
@@ -27,7 +27,7 @@ function getUserChoice(){
 
 
 
-function playRound(playerSelection, computerSelection){
+function playRound(playerSelection, computerSelection) {
   let roundResult = 0; // 0 means tie, -1 means loss, 1 means Win;
   if (playerSelection === computerSelection) {
     return [roundResult, `You Tied! You both selected ${playerSelection}`]
@@ -52,6 +52,39 @@ function playRound(playerSelection, computerSelection){
 
 }
 
-let computerSelection = getComputerChoice();
-let userSelection = getUserChoice();
-console.log(playRound(userSelection, computerSelection));
+function updateScores(result, scores) {
+  if (result[0] === 1) return [ ++scores[0], scores[1] ]
+  else if (result[0] === -1) return [ scores[0], ++scores[1] ]
+  else return scores; // is a tie
+  }
+
+
+
+function printScores(scores) { // 1st element is your score, 2nd element is computer's
+  console.log(`Your score: ${scores[0]}, Computer's score: ${scores[1]}`);
+}
+
+function game() {
+  let roundCount = 0;
+  let scores = [0, 0]; // 1st element is your score, 2nd element is computer's
+  let computerSelection = "";
+  let userSelection = "";
+  console.log("Starting a 5-round game of Rock Paper Scissors");
+  while(roundCount < 5  && scores[0] < 3 && scores[1] < 3){
+    // Get selections from each player
+    userSelection = getUserChoice();
+    computerSelection = getComputerChoice();
+    // Play round
+    result = playRound(userSelection, computerSelection);
+    scores = updateScores(result, scores);
+    console.log(`Round ${roundCount + 1}`);
+    console.log(result[1]);
+    printScores(scores);
+    roundCount++;
+  }
+  if (scores[0] > scores[1]) console.log("You win!");
+  if (scores[0] < scores[1]) console.log("Computer wins!");
+  else console.log("Tie! Nobody wins!");
+}
+
+game();
